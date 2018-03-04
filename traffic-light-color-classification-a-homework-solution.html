@@ -1,45 +1,107 @@
-<!doctype html>
-<html lang="">	
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-	<meta charset="utf-8"/>
-	<title>Traffic light color classification (a homework solution) - Kan-Hua Lee</title>	
-	<meta name="author" content="Kan-Hua Lee">
-	
+    <title>Traffic light color classification (a homework solution) - Kan-Hua Lee</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<meta name="description" content="Disclaimer: This solution is "overfitted" to the image scenarios in the test environments provided by Udacity. This will not be a solution for more general traffic light detection. "Homework solution" in the title means that it is a solution to a simplifed problem, and the main purpose is more for …">
 
 
-	<link rel="top" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'></link>
-	<link rel="stylesheet" href="/theme/css/main.css" type="text/css" />
-		
+<link rel="canonical" href="/traffic-light-color-classification-a-homework-solution.html">
+
+        <meta name="author" content="Kan-Hua Lee" />
+        <meta name="description" content="Disclaimer: This solution is &#34;overfitted&#34; to the image scenarios in the test environments provided by Udacity. This will not be a solution for more general traffic light detection. &#34;Homework solution&#34; in the title means that it is a solution to a simplifed problem, and the main purpose is more for …" />
+
+        <meta property="og:site_name" content="Kan-Hua Lee" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Traffic light color classification (a homework solution)"/>
+        <meta property="og:url" content="/traffic-light-color-classification-a-homework-solution.html"/>
+        <meta property="og:description" content="Disclaimer: This solution is &#34;overfitted&#34; to the image scenarios in the test environments provided by Udacity. This will not be a solution for more general traffic light detection. &#34;Homework solution&#34; in the title means that it is a solution to a simplifed problem, and the main purpose is more for …"/>
+        <meta property="article:published_time" content="2018-03-03" />
+            <meta property="article:section" content="self-driving car" />
+            <meta property="article:author" content="Kan-Hua Lee" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+
 
 </head>
-	
 <body>
 
-    <div class="container">
-	  
-	  <header role="banner">
-	    <div class="feeds">
-	    </div>
-		<a href="" class="title">Kan-Hua Lee</a>
-      </header>
-	
-	  <div class="wrapper">
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+Kan-Hua Lee            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                         <li><a href="/pages/about-me.html">
+                             About Me
+                          </a></li>
+                         <li><a href="/pages/projects.html">
+                             Projects
+                          </a></li>
+                        <li class="active">
+                            <a href="/category/self-driving-car.html">Self-driving car</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/traffic-light-color-classification-a-homework-solution.html"
+                       rel="bookmark"
+                       title="Permalink to Traffic light color classification (a homework solution)">
+                        Traffic light color classification (a homework solution)
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2018-03-03T10:20:00+09:00"> 六 03 3月 2018</time>
+    </span>
 
-		  <div role="main" class="content">
-	<article class="full">
-			
-		<h1>Traffic light color classification (a homework solution)</h1>
-		
-<div class="metadata">
-  <time datetime="2018-03-03T10:20:00+09:00" pubdate>六 03 3月 2018</time>
-    <address class="vcard author">
-      by <a class="url fn" href="/author/kan-hua-lee.html">Kan-Hua Lee</a>
-    </address>
-  in <a href="/category/self-driving-car.html">self-driving car</a>
-</div>		
-		<p>Disclaimer: This solution is "overfitted" to the image scenarios in the test environments provided by Udacity. This will not be a solution for more general traffic light detection.
+
+
+
+
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>Disclaimer: This solution is "overfitted" to the image scenarios in the test environments provided by Udacity. This will not be a solution for more general traffic light detection.
 "Homework solution" in the title means that it is a solution to a simplifed problem, and the main purpose is more for the student's own enrichment rather than contributing anything useful to the world.</p>
 <h2>Feature of this implementation</h2>
 <ul>
@@ -55,58 +117,76 @@
 <li>It works reasonable in the test environments of Udacity self-driving car project, but may not be robust enough for other applications.</li>
 </ul>
 <h2>Motivation of my approach</h2>
-<p>This is a sub-project for the capstone project of Udacity self-driving car nanodegree. There are already many solutions around for this approach.</p>	
+<p>This is a sub-project for the capstone project of Udacity self-driving car nanodegree. There are already many solutions around for this approach.</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
 
-	</article>
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
 
-    <p>
-	<a href="https://twitter.com/share" class="twitter-share-button" data-via="" data-lang="en" data-size="large" data-related="">Tweet</a>
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-	</p>
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="#"><i class="fa fa-you-can-add-links-in-your-config-file-square fa-lg"></i> You can add links in your config file</a></li>
+    <li class="list-group-item"><a href="#"><i class="fa fa-another-social-link-square fa-lg"></i> Another social link</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://getpelican.com/" target="_blank">Pelican</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://python.org/" target="_blank">Python.org</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://jinja.pocoo.org/" target="_blank">Jinja2</a>
+    </li>
+    <li class="list-group-item">
+      <a href="#" target="_blank">You can modify those links in your config file</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2018 Kan-Hua Lee
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
 
 
-		  </div>	
-		  
-		  <div class="sidebar">
 
-	        <nav>
-	          <h2>Categories</h2>
-	          <ul>
-	              <li class="active"><a href="/category/self-driving-car.html">self-driving car</a></li>
-	          </ul>
-	        </nav>
-
-	          <aside>
-	          <h2>Social</h2>
-			    <ul class="social">
-				  <li><a href="#">You can add links in your config file</a><i></i></li>
-				  <li><a href="#">Another social link</a><i></i></li>
-			    </ul>
-			  </aside>
-
-	          <aside>
-	            <h2>Blogroll</h2>
-	            <ul>
-	                <li><a href="http://getpelican.com/">Pelican</a></li>
-	                <li><a href="http://python.org/">Python.org</a></li>
-	                <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-	                <li><a href="#">You can modify those links in your config file</a></li>
-	            </ul>
-	          </aside>
-
-		  </div>
-
-	  </div>
-
-      <footer>
-		<p role="contentinfo">
-		  © 2013 Kan-Hua Lee - Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">pelican</a>. Theme <a href="https://github.com/fle/pelican-simplegrey">pelican-simplegrey</a>.
-    	</p>
-
-	  </footer>	
-
-	</div>
-	
 
 </body>
 </html>
