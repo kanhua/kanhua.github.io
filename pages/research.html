@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>intelligent machine - Kan-Hua Lee</title>
+    <title>Research - Kan-Hua Lee</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -9,16 +9,16 @@
 
 
 
+<link rel="canonical" href="/pages/research.html">
 
-    <meta name="author" content="Kan-Hua Lee" />
-    <meta name="keywords" content="intelligent machine" />
+        <meta name="author" content="Kan-Hua Lee" />
+        <meta name="description" content="These are simulation tools I developed for my day-to-day research work. Pypvcell A solar cell simulation package and toolkit for day-to-day solar cell data analysis. Github Repo Documentation Paper DOI:10.1109/PVSC.2017.8366371 Pypvcircuit A 2D equivalent circuit simulation model for solar cells. Devised a new algorithm to …" />
 
-    <!-- Open Graph tags -->
-        <meta property="og:site_name" content="Kan-Hua Lee" />
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="Kan-Hua Lee"/>
-        <meta property="og:url" content=""/>
-        <meta property="og:description" content="Kan-Hua Lee"/>
+    <meta property="og:site_name" content="Kan-Hua Lee" />
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="Research"/>
+    <meta property="og:url" content="/pages/research.html"/>
+    <meta property="og:description" content="These are simulation tools I developed for my day-to-day research work. Pypvcell A solar cell simulation package and toolkit for day-to-day solar cell data analysis. Github Repo Documentation Paper DOI:10.1109/PVSC.2017.8366371 Pypvcircuit A 2D equivalent circuit simulation model for solar cells. Devised a new algorithm to …" />
 
 
 
@@ -51,7 +51,7 @@ Kan-Hua Lee            </a>
                          <li><a href="/pages/about-me.html">
                              About Me
                           </a></li>
-                         <li><a href="/pages/research.html">
+                         <li class="active"><a href="/pages/research.html">
                              Research
                           </a></li>
                         <li >
@@ -72,51 +72,26 @@ Kan-Hua Lee            </a>
 <div class="container">
     <div class="row">
         <div class="col-sm-9">
-            <article>
-                <h2><a href="/3d-object-detection-with-lyft-self-driving-car-data.html">3D object detection with Lyft self-driving car data</a></h2>
-                <div class="summary"><p>This is my attempt of a past Kaggle competition <a href="https://www.kaggle.com/c/3d-object-detection-for-autonomous-vehicles">Lyft 3D Object Detection for Autonomous Vehicles</a>, using the concept of <a href="http://stanford.edu/~rqi/frustum-pointnets/">frustum-pointnet</a> to solve this past Kaggle competition.</p>
-<p>This is an example of the classifed results:
-<img src="/images/lyft-3d/demo_image_10.png" alt="camera_image"></p>
-<h3>Result</h3>
-<p>This work is still in progress. The result does not seem too bad if …</p>
-                    <a class="btn btn-default btn-xs" href="/3d-object-detection-with-lyft-self-driving-car-data.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/traffic-light-classification-without-re-training-a-dnn-model.html">Traffic light classification without (re-)training a DNN model</a></h2>
-                <div class="summary"><p><img src="/images/traffic_light_demo.png" alt="traffic_light_demo"></p>
-<p>I did this project partly for Udacity's Self-Driving car degree and was lazy to train and retraing a DNN model.
-It ends up that this solution is not so lazy, but I did learn some details and traps of using a HSV or HSL color space.</p>
-<p>I posted the writing-up …</p>
-                    <a class="btn btn-default btn-xs" href="/traffic-light-classification-without-re-training-a-dnn-model.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/implementing-path-planning-of-a-self-driving-car.html">Implementing path planning of a self-driving car</a></h2>
-                <div class="summary"><iframe width="560" height="315" src="https://www.youtube.com/embed/hCUNa_P6BuM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<p>The aim of this project is to implement a car that drives automatically in a simulation world.
-The car should be able to switch the lane smoothly when necessary. 
-I think this is the most fun and challenging project of <a href="https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013">Udacity Self-Driving Car Nanodegree</a>.</p>
-<p>The code repo and the explaination …</p>
-                    <a class="btn btn-default btn-xs" href="/implementing-path-planning-of-a-self-driving-car.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/behavioural-cloning-of-self-driving-car.html">Behavioural cloning of self-driving car</a></h2>
-                <div class="summary"><iframe width="560" height="315" src="https://www.youtube.com/embed/OyS8siF0Mpk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<p>This is a project with Udacity's Self-Driving Car Nanodegree.
-The aim is to use deep learning approach[1] to clone the behaviour of a car in the simulator made by Udacity.
-To get a good data set, I have to "drive" well in the simulator, and use this dataset to …</p>
-                    <a class="btn btn-default btn-xs" href="/behavioural-cloning-of-self-driving-car.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-
+    <section id="content" class="body">
+        <h1 class="entry-title">Research</h1>
+        
+        <div class="entry-content">
+            <p>These are simulation tools I developed for my day-to-day research work.</p>
+<h3><a href="https://github.com/kanhua/pypvcell">Pypvcell</a></h3>
+<p>A solar cell simulation package and toolkit for day-to-day solar cell data analysis.
+<img src="/images/pypvcell_repo_card.png" alt="pypvcell_figure"></p>
+<p><a href="https://github.com/kanhua/pypvcell">Github Repo</a></p>
+<p><a href="https://kanhua.github.io/pypvcell/">Documentation</a></p>
+<p><a href="https://doi.org/10.1109/PVSC.2017.8366371">Paper DOI:10.1109/PVSC.2017.8366371</a></p>
+<h3><a href="https://github.com/kanhua/pypvcircuit">Pypvcircuit</a></h3>
+<p>A 2D equivalent circuit simulation model for solar cells. Devised a new algorithm to speed up the simulation speed by more than 2 times.
+<img src="/images/network_simulation_3d.png" alt="network_figure"
+width="400" height="400"></p>
+<p><a href="https://github.com/kanhua/pypvcircuit">GitHub Repo</a></p>
+<p><a href="https://doi.org/10.24433/CO.2397906.v1">On Code Ocean</a></p>
+<p>Paper published in IEEE Access: <a href="https://doi.org/10.1109/ACCESS.2019.2930002">10.1109/ACCESS.2019.2930002</a></p>
+        </div>
+    </section>
         </div>
         <div class="col-sm-3" id="sidebar">
             <aside>

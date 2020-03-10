@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>3D object detection with Lyft self-driving car data - Kan-Hua Lee</title>
+    <title>Behavioural cloning of self-driving car - Kan-Hua Lee</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -9,20 +9,21 @@
 
 
 
-<link rel="canonical" href="/3d-object-detection-with-lyft-self-driving-car-data.html">
+<link rel="canonical" href="/behavioural-cloning-of-self-driving-car.html">
 
         <meta name="author" content="Kan-Hua Lee" />
-        <meta name="keywords" content="intelligent machine" />
-        <meta name="description" content="This is my attempt of a past Kaggle competition Lyft 3D Object Detection for Autonomous Vehicles, using the concept of frustum-pointnet to solve this past Kaggle competition. This is an example of the classifed results: Result This work is still in progress. The result does not seem too bad if …" />
+        <meta name="keywords" content="intelligent machine,self-driving car" />
+        <meta name="description" content="This is a project with Udacity&#39;s Self-Driving Car Nanodegree. The aim is to use deep learning approach[1] to clone the behaviour of a car in the simulator made by Udacity. To get a good data set, I have to &#34;drive&#34; well in the simulator, and use this dataset to …" />
 
         <meta property="og:site_name" content="Kan-Hua Lee" />
         <meta property="og:type" content="article"/>
-        <meta property="og:title" content="3D object detection with Lyft self-driving car data"/>
-        <meta property="og:url" content="/3d-object-detection-with-lyft-self-driving-car-data.html"/>
-        <meta property="og:description" content="This is my attempt of a past Kaggle competition Lyft 3D Object Detection for Autonomous Vehicles, using the concept of frustum-pointnet to solve this past Kaggle competition. This is an example of the classifed results: Result This work is still in progress. The result does not seem too bad if …"/>
-        <meta property="article:published_time" content="2020-03-08" />
+        <meta property="og:title" content="Behavioural cloning of self-driving car"/>
+        <meta property="og:url" content="/behavioural-cloning-of-self-driving-car.html"/>
+        <meta property="og:description" content="This is a project with Udacity&#39;s Self-Driving Car Nanodegree. The aim is to use deep learning approach[1] to clone the behaviour of a car in the simulator made by Udacity. To get a good data set, I have to &#34;drive&#34; well in the simulator, and use this dataset to …"/>
+        <meta property="article:published_time" content="2017-04-11" />
             <meta property="article:section" content="Blog" />
             <meta property="article:tag" content="intelligent machine" />
+            <meta property="article:tag" content="self-driving car" />
             <meta property="article:author" content="Kan-Hua Lee" />
 
 
@@ -81,10 +82,10 @@ Kan-Hua Lee            </a>
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/3d-object-detection-with-lyft-self-driving-car-data.html"
+                    <a href="/behavioural-cloning-of-self-driving-car.html"
                        rel="bookmark"
-                       title="Permalink to 3D object detection with Lyft self-driving car data">
-                        3D object detection with Lyft self-driving car data
+                       title="Permalink to Behavioural cloning of self-driving car">
+                        Behavioural cloning of self-driving car
                     </a>
                 </h1>
             </header>
@@ -94,7 +95,7 @@ Kan-Hua Lee            </a>
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2020-03-08T21:01:00+09:00"> Sun 08 March 2020</time>
+        <i class="fa fa-calendar"></i><time datetime="2017-04-11T21:00:00+09:00"> Tue 11 April 2017</time>
     </span>
 
 
@@ -103,47 +104,21 @@ Kan-Hua Lee            </a>
 
 <span class="label label-default">Tags</span>
 	<a href="/tag/intelligent-machine.html">intelligent machine</a>
+        /
+	<a href="/tag/self-driving-car.html">self-driving car</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>This is my attempt of a past Kaggle competition <a href="https://www.kaggle.com/c/3d-object-detection-for-autonomous-vehicles">Lyft 3D Object Detection for Autonomous Vehicles</a>, using the concept of <a href="http://stanford.edu/~rqi/frustum-pointnets/">frustum-pointnet</a> to solve this past Kaggle competition.</p>
-<p>This is an example of the classifed results:
-<img src="/images/lyft-3d/demo_image_10.png" alt="camera_image"></p>
-<h3>Result</h3>
-<p>This work is still in progress. The result does not seem too bad if observing by eye. However, the score is not as good as the baseline score by using image segmentation of top-view lidar data (e.g. <a href="https://www.kaggle.com/meaninglesslives/lyft3d-inference-kernel">this work</a>).
-Because this model generates the frustum proposals from camera images, objects behind other objects are not well shown on 2D images, causing some loss in this model. Although this implementation does not exceed the performance of a simple top-view model, I did learn a lot of experience handling pointnet data and computer 3D graphics.</p>
-<p><img src="/images/lyft-3d/demo_3d_lidar_10.png" alt="lidar_image"></p>
-<h3>The implementation</h3>
-<h4>Generate frustum proposal from images</h4>
-<p>The outline of the model is below:</p>
-<p><img src="/images/lyft-3d/frustum_pointnet_implementation.png" alt="frustum_pointnet_implementation"></p>
-<p>Here's some details of the implementation</p>
-<h4>Object detection model</h4>
-<p>The frustum proposal is generated from a object detector. I trained Fast RCNN-ResNET detector using <a href="https://github.com/tensorflow/models/tree/master/research/object_detection">Tensorflow object detection API</a>.</p>
-<p>The following image is an example of the image:</p>
-<p><img src="/images/lyft-3d/CAM_FRONT_2d_detection.png" alt="frustum_pointnet_implementation"></p>
-<p>compared with the point cloud extracted from ground truth:</p>
-<p><img src="/images/lyft-3d/CAM_FRONT_from_rgb.png" alt="frustum_pointnet_implementation"></p>
-<h4>Frustum extraction</h4>
-<p>The frusum proposals was extracted all cameras images of a certain time stamp. These data were saved to a tfrecord files for training a PointNetV1 model. The original paper trained the model for many days. I only trained a few epochs for a few hours because of insuffcient budget.</p>
-<h4>PointNetV1</h4>
-<p>I altered the code of <a href="http://stanford.edu/~rqi/frustum-pointnets/">frustum-pointnet</a> to train the data via the prepared tfrecord files.</p>
-<h3>Analysis and further improvement ideas</h3>
-<p>The IoU precision is not satisfactory. The precision score of each IoU levels are:</p>
-<p>iou level:0.5, avg precision: 0.01156315990772716</p>
-<p>iou level:0.55, avg precision: 0.008525362114315115</p>
-<p>iou level:0.6, avg precision: 0.005816150268591333</p>
-<p>iou level:0.65, avg precision: 0.0038102846985294658</p>
-<p>iou level:0.7, avg precision: 0.0023121225957451587</p>
-<p>iou level:0.75, avg precision: 0.001109161883024114</p>
-<p>iou level:0.8, avg precision: 0.00016343784202644128</p>
-<p>The reason is that this approach generates frustum proposals from 2D images. As a result, object behind another object is misclasified using a 2D object detector, as we can see in the above figures. Also, the averaged precisions drops quite significantly with the IoU levels, indicating that the predicted boxes are not very accurate. Training the PointNet for more epochs would certainly help.</p>
-<ol>
-<li>Add point cloud proposals using a top-view.</li>
-<li>Use image augmentation to make the classes of the data more balanced, this would increase the precisions of the class of objects that have fewer occurences, such as "pedestrains" or "other vehicles"</li>
-</ol>
-<h2>Code</h2>
-<p>The source code of this project: <a href="https://github.com/kanhua/lyft-3d-main">Source code</a>.</p>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/OyS8siF0Mpk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>This is a project with Udacity's Self-Driving Car Nanodegree.
+The aim is to use deep learning approach[1] to clone the behaviour of a car in the simulator made by Udacity.
+To get a good data set, I have to "drive" well in the simulator, and use this dataset to train the model.
+I learned a good amount of hands-on experience of deep learning, especially the impact of the dataset quality on the trained results.
+The source code and detailed docuementation is <a href="https://github.com/kanhua/CarND-Behavioral-Cloning-P3">here</a></p>
+<p>[1] Bojarski, M., Testa, D., Dworakowski, D., Firner, B., Flepp, B., Goyal, 
+P., Jackel, L., Monfort, M., Muller, U., Zhang, J., Zhang, X., Zhao, J., Zieba, K. (2016). 
+End to End Learning for Self-Driving Cars arXiv <a href="https://arxiv.org/abs/1604.07316">https://arxiv.org/abs/1604.07316</a>.</p>
             </div>
             <!-- /.entry-content -->
         </article>

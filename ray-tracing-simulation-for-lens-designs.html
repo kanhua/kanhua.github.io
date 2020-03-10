@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>test equation - Kan-Hua Lee</title>
+    <title>Ray Tracing Simulation for Lens Designs - Kan-Hua Lee</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -9,20 +9,21 @@
 
 
 
-<link rel="canonical" href="/drafts/test-equation.html">
+<link rel="canonical" href="/ray-tracing-simulation-for-lens-designs.html">
 
         <meta name="author" content="Kan-Hua Lee" />
-        <meta name="keywords" content="intelligent machine" />
-        <meta name="description" content="% Pandoc math demos \(a^2 + b^2 = c^2\) \(v(t) = v_0 + \frac{1}{2}at^2\) \(\gamma = \frac{1}{\sqrt{1 - v^2/c^2}}\) \(\exists x \forall y (Rxy \equiv Ryx)\) \(p \wedge q \models p\) \(\Box\diamond p\equiv\diamond p\) \(\int_{0}^{1} x dx = \left …" />
+        <meta name="keywords" content="physics,numerical modeling" />
+        <meta name="description" content="Modeling light as rays is widely used in computer graphics and lens design. I encountered this problem when I tried to do some optical design but had no access to commercial ray-tracing software, such as ZEMAX OpticStudio or LightTools. During my attempt of implementing a ray-tracing software, I did not …" />
 
         <meta property="og:site_name" content="Kan-Hua Lee" />
         <meta property="og:type" content="article"/>
-        <meta property="og:title" content="test equation"/>
-        <meta property="og:url" content="/drafts/test-equation.html"/>
-        <meta property="og:description" content="% Pandoc math demos \(a^2 + b^2 = c^2\) \(v(t) = v_0 + \frac{1}{2}at^2\) \(\gamma = \frac{1}{\sqrt{1 - v^2/c^2}}\) \(\exists x \forall y (Rxy \equiv Ryx)\) \(p \wedge q \models p\) \(\Box\diamond p\equiv\diamond p\) \(\int_{0}^{1} x dx = \left …"/>
-        <meta property="article:published_time" content="2018-03-03" />
+        <meta property="og:title" content="Ray Tracing Simulation for Lens Designs"/>
+        <meta property="og:url" content="/ray-tracing-simulation-for-lens-designs.html"/>
+        <meta property="og:description" content="Modeling light as rays is widely used in computer graphics and lens design. I encountered this problem when I tried to do some optical design but had no access to commercial ray-tracing software, such as ZEMAX OpticStudio or LightTools. During my attempt of implementing a ray-tracing software, I did not …"/>
+        <meta property="article:published_time" content="2020-03-09" />
             <meta property="article:section" content="Blog" />
-            <meta property="article:tag" content="intelligent machine" />
+            <meta property="article:tag" content="physics" />
+            <meta property="article:tag" content="numerical modeling" />
             <meta property="article:author" content="Kan-Hua Lee" />
 
 
@@ -81,10 +82,10 @@ Kan-Hua Lee            </a>
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/drafts/test-equation.html"
+                    <a href="/ray-tracing-simulation-for-lens-designs.html"
                        rel="bookmark"
-                       title="Permalink to test equation">
-                        test equation
+                       title="Permalink to Ray Tracing Simulation for Lens Designs">
+                        Ray Tracing Simulation for Lens Designs
                     </a>
                 </h1>
             </header>
@@ -94,7 +95,7 @@ Kan-Hua Lee            </a>
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2018-03-03T10:22:00+09:00"> Sat 03 March 2018</time>
+        <i class="fa fa-calendar"></i><time datetime="2020-03-09T21:00:00+09:00"> Mon 09 March 2020</time>
     </span>
 
 
@@ -102,19 +103,70 @@ Kan-Hua Lee            </a>
 
 
 <span class="label label-default">Tags</span>
-	<a href="/tag/intelligent-machine.html">intelligent machine</a>
+	<a href="/tag/physics.html">physics</a>
+        /
+	<a href="/tag/numerical-modeling.html">numerical modeling</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>% Pandoc math demos</p>
-<p><span class="math">\(a^2 + b^2 = c^2\)</span></p>
-<p><span class="math">\(v(t) = v_0 + \frac{1}{2}at^2\)</span></p>
-<p><span class="math">\(\gamma = \frac{1}{\sqrt{1 - v^2/c^2}}\)</span>  </p>
-<p><span class="math">\(\exists x \forall y (Rxy \equiv Ryx)\)</span></p>
-<p><span class="math">\(p \wedge q \models p\)</span></p>
-<p><span class="math">\(\Box\diamond p\equiv\diamond p\)</span></p>
-<p><span class="math">\(\int_{0}^{1} x dx = \left[ \frac{1}{2}x^2 \right]_{0}^{1} = \frac{1}{2}\)</span></p>
-<p><span class="math">\(e^x = \sum_{n=0}^\infty \frac{x^n}{n!} = \lim_{n\rightarrow\infty} (1+x/n)^n\)</span></p>
+                <p>Modeling light as rays is widely used in computer graphics and lens design. I encountered this problem when I tried to do some optical design but had no access to commercial ray-tracing software, such as ZEMAX OpticStudio or LightTools. During my attempt of implementing a ray-tracing software, I did not find a single article or book chapter that is a one-stop manual that details the ray-tracing from theory to implementation. I therefore parepared this article to fill this gap.</p>
+<p>This article demonstrates a simple two-dimensional ray-tracing algorithms, with a focus on concnetrator lens design. For lens design with spherical lens surfaces, using ray transfer matrix would be easier to implement and computationally efficient.</p>
+<h2>Outline of ray-tracing algorithm</h2>
+<p>In a ray tracing simulation, light is thought of as a bunch of light rays. You can also think the light are a bunch of particles (i.e. photons), and the “rays” are the trajectory of movements of these particles. When a light ray encouters a surface, some of its energy is refelcted, some is refracted and some are absorbed, and each of the splitted rays keeps going until they strike another surface. Since the focus of this article is lens design, we only deal with the case of refraction. In summary, a ray-tracing simulation iterates the following steps:</p>
+<ul>
+<li>
+<p>Find the intersection between a ray and a surface</p>
+</li>
+<li>
+<p>Calculate the new traveling direction of a ray</p>
+</li>
+</ul>
+<p>The next sections show how we can do this.</p>
+<h2>Find the intersection between ray and the object</h2>
+<p>In geometry, a general way to find the intersections between a ray and a object is to parametrize them. Namely, we can express the vector of the light ray as <span class="math">\(\mathbf{r}(t)=(x(t),y(t),z(t))\)</span> and the equation of the surface as <span class="math">\(S(x,y,z)=0\)</span>. 
+Find a <span class="math">\(t\)</span> such that <span class="math">\(S(x(t),y(t),z(t))=0\)</span> and <span class="math">\(x(t),y(t)\)</span> and <span class="math">\(z(t)\)</span> are within the boundary. Let’s say the solution is <span class="math">\(t'\)</span>, <span class="math">\(x(t'),y(t')\)</span> and <span class="math">\(z(t')\)</span> are then the intersecton point between the ray and the surface.</p>
+<p><span class="math">\(x(t)\)</span>, <span class="math">\(y(t)\)</span> and <span class="math">\(z(t)\)</span> are directional cosines. The convention of lens design favors the following convention 
+</p>
+<div class="math">$$
+\mathbf{r}(t) = (x_0+\sin(\phi)t, y_0+\sin(\theta)cos(\phi)t ,z_0+\cos(\theta)cos(\phi)t)
+$$</div>
+<p> 
+The starting points of the rays <span class="math">\(x_0\)</span>, <span class="math">\(y_0\)</span>, <span class="math">\(z_0\)</span> and the initial directional angles <span class="math">\(theta\)</span> and <span class="math">\(phi\)</span> are set by the users as the initial conditions of the rays. These parameters are constant until the ray is reflected or refracted. We can think of <span class="math">\(t\)</span> as the “time of flight” of the ray. The intersection point <span class="math">\(t'\)</span> can be thought of as the time that the ray and the surface intersected.</p>
+<p><img src="/images/ray_tracing_illustration.svg" alt="path_planning_demo" width="50%"></p>
+<h2>Calculate the new traveling direction of a ray</h2>
+<h3>Calculate the normal vector</h3>
+<p>The normal vector is the normal vector of the tangent vector on the surface <span class="math">\((x,y(x))\)</span>. Numerically, the tangent vector of this surface at <span class="math">\((x,y)\)</span> is the first order derivative: <span class="math">\(d\mathbf{s}=(dx,dy)=(x+\epsilon-x-\epsilon, y(x+\epsilon)-y(x-\epsilon))\)</span>. In the case of 2D, the normal vector is <span class="math">\(\mathbf{n}=(dx,-dy)\)</span>.</p>
+<h3>General form of Snell’s law</h3>
+<p>From high school physics we know that we can calculate the ray defraction by using Snell’s law: 
+</p>
+<div class="math">$$
+n_r'\sin\theta'=n_r \sin \theta
+$$</div>
+<p> 
+The above equation only describes the relation between the incident angle and refracted angle. 
+To deal with ray vectors incident on an artitrary surface in higher dimenional space, 
+we need a more general expression of Snell’s law: 
+</p>
+<div class="math">$$
+n_r'\mathbf{r}'\times \mathbf{n}=n_r \mathbf{r}\times \mathbf{n}
+$$</div>
+<p> 
+where <span class="math">\(\mathbf{n}\)</span> is the normal vector of the surface at the point of refraction, <span class="math">\(n_r\)</span> and <span class="math">\(n_r'\)</span> are the refractive index of the mediums, <span class="math">\(\mathbf{r}\)</span> and <span class="math">\(\mathbf{r'}\)</span> are the ray vectors before and after the refraction, respectively. <span class="math">\(\times\)</span> is the vector cross product. Note that all the vector shown above are noramlzed unit vectors. The above equation can be rearranged to obtain a more useful expression for calculating the refracted vector <span class="math">\(\mathbf{r}'\)</span>: </p>
+<div class="math">$$
+n_r'\mathbf{r}'=n_r\mathbf{r}+(n'\mathbf{r}'\cdot\mathbf{n}-n\mathbf{r}\cdot\mathbf{n})\mathbf{n}   
+$$</div>
+<p>
+and <span class="math">\(\mathbf{r}'\cdot\mathbf{n}\)</span> at the right-hand side can be calculated by using Equation [eqn:basic_snell] 
+</p>
+<div class="math">$$
+\begin{split}
+    \mathbf{r}'\cdot\mathbf{n}&amp;=\cos\theta' \
+                              &amp;=\sqrt{1-\sin^2\theta'} \
+                              &amp;=\sqrt{1-\left(\frac{n_r}{n_r'}\sin\theta\right)^2}
+\end{split}
+$$</div>
+<p> 
+Substuting the known <span class="math">\(\mathbf{r}\)</span>, <span class="math">\(\mathbf{n}\)</span>, <span class="math">\(n_r\)</span>, <span class="math">\(n_r'\)</span> and <span class="math">\(\mathbf{r}'\cdot\mathbf{n}\)</span> into Equation [eqn:general_snells_law], we can obtain the refracted vector <span class="math">\(\mathbf{r'}\)</span>.</p>
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -209,14 +261,14 @@ Kan-Hua Lee            </a>
     <li class="list-group-item tag-1">
       <a href="/tag/self-driving-car.html">self-driving car</a>
     </li>
-    <li class="list-group-item tag-2">
-      <a href="/tag/computer-vision.html">computer vision</a>
+    <li class="list-group-item tag-4">
+      <a href="/tag/numerical-modeling.html">numerical modeling</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/physics.html">physics</a>
     </li>
     <li class="list-group-item tag-4">
-      <a href="/tag/numerical-modeling.html">numerical modeling</a>
+      <a href="/tag/computer-vision.html">computer vision</a>
     </li>
   </ul>
 </li>
