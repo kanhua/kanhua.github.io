@@ -109,7 +109,8 @@ Kan-Hua Lee            </a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>Modeling light as rays is widely used in computer graphics and lens design. I encountered this problem when I tried to do some optical design but had no access to commercial ray-tracing software, such as ZEMAX OpticStudio or LightTools. During my attempt of implementing a ray-tracing program for my own research, I did not find a single article or book chapter that serves a one-stop manual that details the ray-tracing from theory to implementation. I therefore parepared this tutorial to fill this gap.</p>
+                <p><img src="/images/ray_tracing_result.png" alt="ray_tracing_result" width="50%"></p>
+<p>Modeling light as rays is widely used in computer graphics and lens design. I encountered this problem when I tried to do some optical design but had no access to commercial ray-tracing software, such as ZEMAX OpticStudio or LightTools. During my attempt of implementing a ray-tracing program for my own research, I did not find a single article or book chapter that serves a one-stop manual that details the ray-tracing from theory to implementation. I therefore parepared this tutorial to fill this gap.</p>
 <p>This article demonstrates a simple two-dimensional ray-tracing algorithms, with a focus on concnetrator lens design. For lens design with spherical lens surfaces, using ray transfer matrix would be easier to implement and computationally efficient.</p>
 <h2>Live demonstrating code</h2>
 <p>I wrote a vanilla python ray-tracing implmentation with explaination in a <a href="https://www.kaggle.com/photunix/ray-tracing-in-python">Jupyter Notebook run by Kaggle Kernel</a>.</p>
@@ -135,7 +136,7 @@ $$</div>
 <p> 
 The starting points of the rays <span class="math">\(x_0\)</span>, <span class="math">\(y_0\)</span>, <span class="math">\(z_0\)</span> and the initial directional angles <span class="math">\(theta\)</span> and <span class="math">\(phi\)</span> are set by the users as the initial conditions of the rays. These parameters are constant until the ray is reflected or refracted. We can think of <span class="math">\(t\)</span> as the “time of flight” of the ray. The intersection point <span class="math">\(t'\)</span> can be thought of as the time that the ray and the surface intersected.
 For two-dimensional simulation, we just set <span class="math">\(\phi=0\)</span> and work on <span class="math">\(y-z\)</span> plane only.</p>
-<p><img src="/images/ray_tracing_illustration.svg" alt="path_planning_demo" width="50%"></p>
+<p><img src="/images/ray_tracing_illustration.svg" alt="ray_tracing_illustration" width="50%"></p>
 <h2>Calculate the new traveling direction of a ray</h2>
 <h3>Calculate the normal vector</h3>
 <p>The normal vector is the normal vector of the tangent vector on the surface <span class="math">\((x,y(x))\)</span>. Numerically, the tangent vector of this surface at <span class="math">\((x,y)\)</span> is the first order derivative: <span class="math">\(d\mathbf{s}=(dx,dy)=dx(1,\frac{dy}{dx})=dx(1,y'(x))\)</span>. In the case of 2D, the normal vector is <span class="math">\(\mathbf{n}=(dy,-dx)\)</span>.</p>
@@ -268,10 +269,10 @@ Substuting the known <span class="math">\(\mathbf{r}\)</span>, <span class="math
       <a href="/tag/computer-vision.html">computer vision</a>
     </li>
     <li class="list-group-item tag-4">
-      <a href="/tag/numerical-modeling.html">numerical modeling</a>
+      <a href="/tag/physics.html">physics</a>
     </li>
     <li class="list-group-item tag-4">
-      <a href="/tag/physics.html">physics</a>
+      <a href="/tag/numerical-modeling.html">numerical modeling</a>
     </li>
   </ul>
 </li>
