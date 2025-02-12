@@ -37,6 +37,7 @@
 
 
 
+
 </head>
 <body>
 
@@ -57,8 +58,8 @@ Kan-Hua Lee            </a>
                          <li><a href="/pages/about-me.html">
                              About Me
                           </a></li>
-                         <li><a href="/pages/research.html">
-                             Research
+                         <li><a href="/pages/projects.html">
+                             Projects
                           </a></li>
                         <li class="active">
                             <a href="/category/blog.html">Blog</a>
@@ -126,113 +127,44 @@ Kan-Hua Lee            </a>
 </ul>
 <p>The next sections show how we can do this.</p>
 <h2>Find the intersection between ray and the object</h2>
-<p>In geometry, a general way to find the intersections between a ray and a object is to parametrize them. Namely, we can express the vector of the light ray as <span class="math">\(\mathbf{r}(t)=(x(t),y(t),z(t))\)</span> and the equation of the surface as <span class="math">\(S(x,y,z)=0\)</span>. 
-Find a <span class="math">\(t\)</span> such that <span class="math">\(S(x(t),y(t),z(t))=0\)</span> and <span class="math">\(x(t),y(t)\)</span> and <span class="math">\(z(t)\)</span> are within the boundary. Let’s say the solution is <span class="math">\(t'\)</span>, <span class="math">\(x(t'),y(t')\)</span> and <span class="math">\(z(t')\)</span> are then the intersecton point between the ray and the surface.</p>
-<p><span class="math">\(x(t)\)</span>, <span class="math">\(y(t)\)</span> and <span class="math">\(z(t)\)</span> are directional cosines. Geometrical optics often favors the following convention 
-</p>
-<div class="math">$$
+<p>In geometry, a general way to find the intersections between a ray and a object is to parametrize them. Namely, we can express the vector of the light ray as $\mathbf{r}(t)=(x(t),y(t),z(t))$ and the equation of the surface as $S(x,y,z)=0$. 
+Find a $t$ such that $S(x(t),y(t),z(t))=0$ and $x(t),y(t)$ and $z(t)$ are within the boundary. Let’s say the solution is $t'$, $x(t'),y(t')$ and $z(t')$ are then the intersecton point between the ray and the surface.</p>
+<p>$x(t)$, $y(t)$ and $z(t)$ are directional cosines. Geometrical optics often favors the following convention 
+$$
 \mathbf{r}(t) = (x_0+\sin(\phi)t, y_0+\sin(\theta)cos(\phi)t ,z_0+\cos(\theta)cos(\phi)t)
-$$</div>
-<p> 
-The starting points of the rays <span class="math">\(x_0\)</span>, <span class="math">\(y_0\)</span>, <span class="math">\(z_0\)</span> and the initial directional angles <span class="math">\(theta\)</span> and <span class="math">\(phi\)</span> are set by the users as the initial conditions of the rays. These parameters are constant until the ray is reflected or refracted. We can think of <span class="math">\(t\)</span> as the “time of flight” of the ray. The intersection point <span class="math">\(t'\)</span> can be thought of as the time that the ray and the surface intersected.
-For two-dimensional simulation, we just set <span class="math">\(\phi=0\)</span> and work on <span class="math">\(y-z\)</span> plane only.</p>
+$$ 
+The starting points of the rays $x_0$, $y_0$, $z_0$ and the initial directional angles $theta$ and $phi$ are set by the users as the initial conditions of the rays. These parameters are constant until the ray is reflected or refracted. We can think of $t$ as the “time of flight” of the ray. The intersection point $t'$ can be thought of as the time that the ray and the surface intersected.
+For two-dimensional simulation, we just set $\phi=0$ and work on $y-z$ plane only.</p>
 <p><img src="/images/ray_tracing_illustration.svg" alt="ray_tracing_illustration" width="50%"></p>
 <h2>Calculate the new traveling direction of a ray</h2>
 <h3>Calculate the normal vector</h3>
-<p>The normal vector is the normal vector of the tangent vector on the surface <span class="math">\((x,y(x))\)</span>. Numerically, the tangent vector of this surface at <span class="math">\((x,y)\)</span> is the first order derivative: <span class="math">\(d\mathbf{s}=(dx,dy)=dx(1,\frac{dy}{dx})=dx(1,y'(x))\)</span>. In the case of 2D, the normal vector is <span class="math">\(\mathbf{n}=(dy,-dx)\)</span>.</p>
+<p>The normal vector is the normal vector of the tangent vector on the surface $(x,y(x))$. Numerically, the tangent vector of this surface at $(x,y)$ is the first order derivative: $d\mathbf{s}=(dx,dy)=dx(1,\frac{dy}{dx})=dx(1,y'(x))$. In the case of 2D, the normal vector is $\mathbf{n}=(dy,-dx)$.</p>
 <h3>General form of Snell’s law</h3>
 <p>From high school physics we know that we can calculate the ray defraction by using Snell’s law: </p>
-<div class="math">\begin{equation}
+<p>\begin{equation}
 n_r'\sin\theta'=n_r \sin \theta ~~~~~(1)
-\end{equation}</div>
+\end{equation}</p>
 <p>The above equation only describes the relation between the incident angle and refracted angle. 
 To deal with ray vectors incident on an artitrary surface in higher dimenional space, 
 we need a more general expression of Snell’s law: 
-</p>
-<div class="math">$$
+$$
 n_r'\mathbf{r}'\times \mathbf{n}=n_r \mathbf{r}\times \mathbf{n}
-$$</div>
-<p> 
-where <span class="math">\(\mathbf{n}\)</span> is the normal vector of the surface at the point of refraction, <span class="math">\(n_r\)</span> and <span class="math">\(n_r'\)</span> are the refractive index of the mediums, <span class="math">\(\mathbf{r}\)</span> and <span class="math">\(\mathbf{r'}\)</span> are the ray vectors before and after the refraction, respectively. <span class="math">\(\times\)</span> is the vector cross product. Note that all the vector shown above are noramlzed unit vectors. The above equation can be rearranged to obtain a more useful expression for calculating the refracted vector <span class="math">\(\mathbf{r}'\)</span>: </p>
-<div class="math">$$
+$$ 
+where $\mathbf{n}$ is the normal vector of the surface at the point of refraction, $n_r$ and $n_r'$ are the refractive index of the mediums, $\mathbf{r}$ and $\mathbf{r'}$ are the ray vectors before and after the refraction, respectively. $\times$ is the vector cross product. Note that all the vector shown above are noramlzed unit vectors. The above equation can be rearranged to obtain a more useful expression for calculating the refracted vector $\mathbf{r}'$: </p>
+<p>$$
 n_r'\mathbf{r}'=n_r\mathbf{r}+(n'\mathbf{r}'\cdot\mathbf{n}-n\mathbf{r}\cdot\mathbf{n})\mathbf{n}~~~~(2)
-$$</div>
-<p>
-and <span class="math">\(\mathbf{r}'\cdot\mathbf{n}\)</span> at the right-hand side can be calculated by using Equation (1)
-</p>
-<div class="math">$$
+$$
+and $\mathbf{r}'\cdot\mathbf{n}$ at the right-hand side can be calculated by using Equation (1)
+$$
 \begin{split}
     \mathbf{r}'\cdot\mathbf{n}&amp;=\cos\theta' \
                               &amp;=\sqrt{1-\sin^2\theta'} \
                               &amp;=\sqrt{1-\left(\frac{n_r}{n_r'}\sin\theta\right)^2}
 \end{split}
-$$</div>
-<p> 
-Substuting the known <span class="math">\(\mathbf{r}\)</span>, <span class="math">\(\mathbf{n}\)</span>, <span class="math">\(n_r\)</span>, <span class="math">\(n_r'\)</span> and <span class="math">\(\mathbf{r}'\cdot\mathbf{n}\)</span> into Equation (2), we can obtain the refracted vector <span class="math">\(\mathbf{r'}\)</span>.</p>
+$$ 
+Substuting the known $\mathbf{r}$, $\mathbf{n}$, $n_r$, $n_r'$ and $\mathbf{r}'\cdot\mathbf{n}$ into Equation (2), we can obtain the refracted vector $\mathbf{r'}$.</p>
 <h3>References</h3>
 <p>[1] Roland Winston, Juan C. Minano and Pablo Benitez, Nonimaging Optics. Academic Press, 2005.</p>
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-
-    var configscript = document.createElement('script');
-    configscript.type = 'text/x-mathjax-config';
-    configscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'none' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        availableFonts: ['STIX', 'TeX']," +
-        "        preferredFont: 'STIX'," +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(configscript);
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
             </div>
             <!-- /.entry-content -->
         </article>
@@ -251,6 +183,7 @@ Substuting the known <span class="math">\(\mathbf{r}\)</span>, <span class="math
   <ul class="list-group" id="social">
     <li class="list-group-item"><a href="https://github.com/kanhua"><i class="fa fa-github-square fa-lg"></i> github</a></li>
     <li class="list-group-item"><a href="https://www.linkedin.com/in/kanhualee/"><i class="fa fa-linkedin-square fa-lg"></i> linkedin</a></li>
+    <li class="list-group-item"><a href="https://medium.com/@kanhua"><i class="fa fa-medium-square fa-lg"></i> medium</a></li>
   </ul>
 </li>
 <!-- End Sidebar/Social -->
@@ -260,10 +193,10 @@ Substuting the known <span class="math">\(\mathbf{r}\)</span>, <span class="math
   <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
   <ul class="list-group " id="tags">
     <li class="list-group-item tag-1">
-      <a href="/tag/intelligent-machine.html">intelligent machine</a>
+      <a href="/tag/self-driving-car.html">self-driving car</a>
     </li>
     <li class="list-group-item tag-1">
-      <a href="/tag/self-driving-car.html">self-driving car</a>
+      <a href="/tag/intelligent-machine.html">intelligent machine</a>
     </li>
     <li class="list-group-item tag-2">
       <a href="/tag/computer-vision.html">computer vision</a>

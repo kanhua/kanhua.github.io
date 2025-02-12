@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <meta name="generator" content="Pelican" />
+                        <title>kanhua-profile - Kan-Hua</title>
+                        <link rel="stylesheet" href="/theme/css/main.css" />
+        </head>
+
+        <body id="index" class="home">
+                <header id="banner" class="body">
+                        <h1><a href="/">kanhua-profile</a></h1>
+                        <nav><ul>
+                                                <li><a href="/pages/research.html">Research</a></li>
+                                                <li><a href="/pages/about-me.html">About Me</a></li>
+                                                <li><a href="/category/blog.html">Blog</a></li>
+                        </ul></nav>
+                </header><!-- /#banner -->
+
+                <aside id="featured" class="body">
+                    <article>
+                        <h1 class="entry-title"><a href="/ray-tracing-simulation-a-tutorial.html">Ray Tracing Simulation: A Tutorial</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2020-03-09T21:00:00+01:00">
+                Published: Mon 09 March 2020
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="/author/kan-hua.html">Kan-Hua</a>
+                </address>
+        <p>In <a href="/category/blog.html">Blog</a>.</p>
+<p>tags: <a href="/tag/physics.html">physics</a> <a href="/tag/numerical-modeling.html">numerical modeling</a> </p>        
+</footer><!-- /.post-info --><p><img src="/images/ray_tracing_result.png" alt="ray_tracing_result" width="50%"></p>
+<p>Modeling light as rays is widely used in computer graphics and lens design. I encountered this problem when I tried to do some optical design but had no access to commercial ray-tracing software, such as ZEMAX OpticStudio or LightTools. During my attempt of implementing a ray-tracing program for my own research, I did not find a single article or book chapter that serves a one-stop manual that details the ray-tracing from theory to implementation. I therefore parepared this tutorial to fill this gap.</p>
+<p>This article demonstrates a simple two-dimensional ray-tracing algorithms, with a focus on concnetrator lens design. For lens design with spherical lens surfaces, using ray transfer matrix would be easier to implement and computationally efficient.</p>
+<h2>Live demonstrating code</h2>
+<p>I wrote a vanilla python ray-tracing implmentation with explaination in a <a href="https://www.kaggle.com/photunix/ray-tracing-in-python">Jupyter Notebook run by Kaggle Kernel</a>.</p>
+<h2>Outline of ray-tracing algorithm</h2>
+<p>In a ray tracing simulation, light is thought of as a bunch of light rays. You can also think the light are a bunch of particles (i.e. photons), and the “rays” are the trajectory of movements of these particles. When a light ray encouters a surface, some of its energy is refelcted, some is refracted and some are absorbed, and each of the splitted rays keeps going until they strike another surface. Since the focus of this article is lens design, we only deal with the case of refraction. In summary, a ray-tracing simulation iterates the following steps:</p>
+<ul>
+<li>
+<p>Find the intersection between a ray and a surface</p>
+</li>
+<li>
+<p>Calculate the new traveling direction of a ray</p>
+</li>
+</ul>
+<p>The next sections show how we can do this.</p>
+<h2>Find the intersection between ray and the object</h2>
+<p>In geometry, a general way to find the intersections between a ray and a object is to parametrize them. Namely, we can express the vector of the light ray as $\mathbf{r}(t)=(x(t),y(t),z(t))$ and the equation of the surface as $S(x,y,z)=0$. 
+Find a $t$ such that $S(x(t),y(t),z(t))=0$ and $x(t),y(t)$ and $z(t)$ are within the boundary. Let’s say the solution is $t'$, $x(t'),y(t')$ and $z(t')$ are then the intersecton point between the ray and the surface.</p>
+<p>$x(t)$, $y(t)$ and $z(t)$ are directional cosines. Geometrical optics often favors the following convention 
+$$
+\mathbf{r}(t) = (x_0+\sin(\phi)t, y_0+\sin(\theta)cos(\phi)t ,z_0+\cos(\theta)cos(\phi)t)
+$$ 
+The starting points of the rays $x_0$, $y_0$, $z_0$ and the initial directional angles $theta$ and $phi$ are set by the users as the initial conditions of the rays. These parameters are constant until the ray is reflected or refracted. We can think of $t$ as the “time of flight” of the ray. The intersection point $t'$ can be thought of as the time that the ray and the surface intersected.
+For two-dimensional simulation, we just set $\phi=0$ and work on $y-z$ plane only.</p>
+<p><img src="/images/ray_tracing_illustration.svg" alt="ray_tracing_illustration" width="50%"></p>
+<h2>Calculate the new traveling direction of a ray</h2>
+<h3>Calculate the normal vector</h3>
+<p>The normal vector is the normal vector of the tangent vector on the surface $(x,y(x))$. Numerically, the tangent vector of this surface at $(x,y)$ is the first order derivative: $d\mathbf{s}=(dx,dy)=dx(1,\frac{dy}{dx})=dx(1,y'(x))$. In the case of 2D, the normal vector is $\mathbf{n}=(dy,-dx)$.</p>
+<h3>General form of Snell’s law</h3>
+<p>From high school physics we know that we can calculate the ray defraction by using Snell’s law: </p>
+<p>\begin{equation}
+n_r'\sin\theta'=n_r \sin \theta ~~~~~(1)
+\end{equation}</p>
+<p>The above equation only describes the relation between the incident angle and refracted angle. 
+To deal with ray vectors incident on an artitrary surface in higher dimenional space, 
+we need a more general expression of Snell’s law: 
+$$
+n_r'\mathbf{r}'\times \mathbf{n}=n_r \mathbf{r}\times \mathbf{n}
+$$ 
+where $\mathbf{n}$ is the normal vector of the surface at the point of refraction, $n_r$ and $n_r'$ are the refractive index of the mediums, $\mathbf{r}$ and $\mathbf{r'}$ are the ray vectors before and after the refraction, respectively. $\times$ is the vector cross product. Note that all the vector shown above are noramlzed unit vectors. The above equation can be rearranged to obtain a more useful expression for calculating the refracted vector $\mathbf{r}'$: </p>
+<p>$$
+n_r'\mathbf{r}'=n_r\mathbf{r}+(n'\mathbf{r}'\cdot\mathbf{n}-n\mathbf{r}\cdot\mathbf{n})\mathbf{n}~~~~(2)
+$$
+and $\mathbf{r}'\cdot\mathbf{n}$ at the right-hand side can be calculated by using Equation (1)
+$$
+\begin{split}
+    \mathbf{r}'\cdot\mathbf{n}&amp;=\cos\theta' \
+                              &amp;=\sqrt{1-\sin^2\theta'} \
+                              &amp;=\sqrt{1-\left(\frac{n_r}{n_r'}\sin\theta\right)^2}
+\end{split}
+$$ 
+Substuting the known $\mathbf{r}$, $\mathbf{n}$, $n_r$, $n_r'$ and $\mathbf{r}'\cdot\mathbf{n}$ into Equation (2), we can obtain the refracted vector $\mathbf{r'}$.</p>
+<h3>References</h3>
+<p>[1] Roland Winston, Juan C. Minano and Pablo Benitez, Nonimaging Optics. Academic Press, 2005.</p>                    </article>
+                </aside><!-- /#featured -->
+                    <section id="content" class="body">
+                        <h1>Other articles</h1>
+                        <hr />
+                        <ol id="posts-list" class="hfeed">
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="/3d-object-detection-with-lyft-self-driving-car-data.html" rel="bookmark"
+                               title="Permalink to 3D object detection with Lyft self-driving car data">3D object detection with Lyft self-driving car data</a></h1>
+                    </header>
+
+                    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2020-03-08T21:01:00+01:00">
+                Published: Sun 08 March 2020
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="/author/kan-hua.html">Kan-Hua</a>
+                </address>
+        <p>In <a href="/category/blog.html">Blog</a>.</p>
+<p>tags: <a href="/tag/intelligent-machine.html">intelligent machine</a> </p>        
+</footer><!-- /.post-info -->                        <p>This is my attempt of a past Kaggle competition <a href="https://www.kaggle.com/c/3d-object-detection-for-autonomous-vehicles">Lyft 3D Object Detection for Autonomous Vehicles</a>, using the concept of <a href="http://stanford.edu/~rqi/frustum-pointnets/">frustum-pointnet</a> to solve this past Kaggle competition.</p>
+<p>This is an example of the classifed results:
+<img src="/images/lyft-3d/demo_image_10.png" alt="camera_image"></p>
+<h3>Result</h3>
+<p>This work is still in progress. The result does not seem too bad if …</p>
+                        <a class="readmore" href="/3d-object-detection-with-lyft-self-driving-car-data.html">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="/traffic-light-classification-without-re-training-a-dnn-model.html" rel="bookmark"
+                               title="Permalink to Traffic light classification without (re-)training a DNN model">Traffic light classification without (re-)training a DNN model</a></h1>
+                    </header>
+
+                    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-11-01T23:00:00+01:00">
+                Published: Fri 01 November 2019
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="/author/kan-hua.html">Kan-Hua</a>
+                </address>
+        <p>In <a href="/category/blog.html">Blog</a>.</p>
+<p>tags: <a href="/tag/intelligent-machine.html">intelligent machine</a> <a href="/tag/computer-vision.html">computer vision</a> </p>        
+</footer><!-- /.post-info -->                        <p><img src="/images/traffic_light_demo.png" alt="traffic_light_demo"></p>
+<p>I did this project partly for Udacity's Self-Driving car degree and was lazy to train and retraing a DNN model.
+It ends up that this solution is not so lazy, but I did learn some details and traps of using a HSV or HSL color space.</p>
+<p>I posted the writing-up …</p>
+                        <a class="readmore" href="/traffic-light-classification-without-re-training-a-dnn-model.html">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="/lane-line-detection.html" rel="bookmark"
+                               title="Permalink to Lane line detection">Lane line detection</a></h1>
+                    </header>
+
+                    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-07-13T20:54:00+02:00">
+                Published: Fri 13 July 2018
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="/author/kan-hua.html">Kan-Hua</a>
+                </address>
+        <p>In <a href="/category/blog.html">Blog</a>.</p>
+<p>tags: <a href="/tag/self-driving-car.html">self-driving car</a> <a href="/tag/computer-vision.html">computer vision</a> </p>        
+</footer><!-- /.post-info -->                        <p>This is a project with Udacity's Self-Driving Car Nanodegree.
+The aim is to identify the lane lines on the road and get their curvatures, using an algorithmic (i.e. non-machine learning) way.</p>
+<p>Here's the result of the baseline video:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Z9-51I20zCI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>and here's the results on a more challenging scene:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/BfmWPUB-CTk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h3>Code and …</h3>
+                        <a class="readmore" href="/lane-line-detection.html">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="/implementing-path-planning-of-a-self-driving-car.html" rel="bookmark"
+                               title="Permalink to Implementing path planning of a self-driving car">Implementing path planning of a self-driving car</a></h1>
+                    </header>
+
+                    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-01-01T23:00:00+01:00">
+                Published: Mon 01 January 2018
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="/author/kan-hua.html">Kan-Hua</a>
+                </address>
+        <p>In <a href="/category/blog.html">Blog</a>.</p>
+<p>tags: <a href="/tag/intelligent-machine.html">intelligent machine</a> <a href="/tag/self-driving-car.html">self-driving car</a> </p>        
+</footer><!-- /.post-info -->                        <iframe width="560" height="315" src="https://www.youtube.com/embed/hCUNa_P6BuM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>The aim of this project is to implement a car that drives automatically in a simulation world.
+The car should be able to switch the lane smoothly when necessary. 
+I think this is the most fun and challenging project of <a href="https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013">Udacity Self-Driving Car Nanodegree</a>.</p>
+<p>The code repo and the explaination …</p>
+                        <a class="readmore" href="/implementing-path-planning-of-a-self-driving-car.html">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
+
+                <li><article class="hentry">
+                    <header>
+                        <h1><a href="/behavioural-cloning-of-self-driving-car.html" rel="bookmark"
+                               title="Permalink to Behavioural cloning of self-driving car">Behavioural cloning of self-driving car</a></h1>
+                    </header>
+
+                    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-04-11T21:00:00+02:00">
+                Published: Tue 11 April 2017
+        </abbr>
+
+                <address class="vcard author">
+                        By                                 <a class="url fn" href="/author/kan-hua.html">Kan-Hua</a>
+                </address>
+        <p>In <a href="/category/blog.html">Blog</a>.</p>
+<p>tags: <a href="/tag/intelligent-machine.html">intelligent machine</a> <a href="/tag/self-driving-car.html">self-driving car</a> </p>        
+</footer><!-- /.post-info -->                        <iframe width="560" height="315" src="https://www.youtube.com/embed/OyS8siF0Mpk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>This is a project with Udacity's Self-Driving Car Nanodegree.
+The aim is to use deep learning approach[1] to clone the behaviour of a car in the simulator made by Udacity.
+To get a good data set, I have to "drive" well in the simulator, and use this dataset to …</p>
+                        <a class="readmore" href="/behavioural-cloning-of-self-driving-car.html">read more</a>
+                    </div><!-- /.entry-content -->
+                </article></li>
+                    </ol><!-- /#posts-list -->
+                    </section><!-- /#content -->
+                <section id="extras" class="body">
+                                <div class="blogroll">
+                                        <h2>links</h2>
+                                        <ul>
+                                                        <li><a href="https://getpelican.com/">Pelican</a></li>
+                                                        <li><a href="https://www.python.org/">Python.org</a></li>
+                                                        <li><a href="https://palletsprojects.com/p/jinja/">Jinja2</a></li>
+                                                        <li><a href="#">You can modify those links in your config file</a></li>
+                                        </ul>
+                                </div><!-- /.blogroll -->
+                                <div class="social">
+                                        <h2>social</h2>
+                                        <ul>
+
+                                                        <li><a href="#">You can add links in your config file</a></li>
+                                                        <li><a href="#">Another social link</a></li>
+                                        </ul>
+                                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+                <footer id="contentinfo" class="body">
+                        <address id="about" class="vcard body">
+                                Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+                        </address><!-- /#about -->
+
+                        <p>The theme is by <a rel="nofollow" href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+                </footer><!-- /#contentinfo -->
+
+        </body>
+</html>
