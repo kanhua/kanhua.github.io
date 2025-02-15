@@ -12,7 +12,7 @@
 <link rel="canonical" href="/3d-object-detection-with-lyft-self-driving-car-data.html">
 
         <meta name="author" content="Kan-Hua Lee" />
-        <meta name="keywords" content="intelligent machine" />
+        <meta name="keywords" content="self-driving car,computer vision" />
         <meta name="description" content="This is my attempt of a past Kaggle competition Lyft 3D Object Detection for Autonomous Vehicles, using the concept of frustum-pointnet to solve this past Kaggle competition. This is an example of the classifed results: Result This work is still in progress. The result does not seem too bad if …" />
 
         <meta property="og:site_name" content="Kan-Hua Lee" />
@@ -22,7 +22,8 @@
         <meta property="og:description" content="This is my attempt of a past Kaggle competition Lyft 3D Object Detection for Autonomous Vehicles, using the concept of frustum-pointnet to solve this past Kaggle competition. This is an example of the classifed results: Result This work is still in progress. The result does not seem too bad if …"/>
         <meta property="article:published_time" content="2020-03-08" />
             <meta property="article:section" content="Blog" />
-            <meta property="article:tag" content="intelligent machine" />
+            <meta property="article:tag" content="self-driving car" />
+            <meta property="article:tag" content="computer vision" />
             <meta property="article:author" content="Kan-Hua Lee" />
 
 
@@ -103,7 +104,9 @@ Kan-Hua Lee            </a>
 
 
 <span class="label label-default">Tags</span>
-	<a href="/tag/intelligent-machine.html">intelligent machine</a>
+	<a href="/tag/self-driving-car.html">self-driving car</a>
+        /
+	<a href="/tag/computer-vision.html">computer vision</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
@@ -138,10 +141,10 @@ Because this model generates the frustum proposals from camera images, objects b
 <p>iou level:0.7, avg precision: 0.0023121225957451587</p>
 <p>iou level:0.75, avg precision: 0.001109161883024114</p>
 <p>iou level:0.8, avg precision: 0.00016343784202644128</p>
-<p>The reason is that this approach generates frustum proposals from 2D images. As a result, object behind another object is misclasified using a 2D object detector, as we can see in the above figures. Also, the averaged precisions drops quite significantly with the IoU levels, indicating that the predicted boxes are not very accurate. Training the PointNet for more epochs would certainly help.</p>
+<p>The reason is that this approach generates frustum proposals from 2D images. As a result, object behind another object is misclassified using a 2D object detector, as we can see in the above figures. Also, the averaged precisions drops quite significantly with the IoU levels, indicating that the predicted boxes are not very accurate. Training the PointNet for more epochs would certainly help.</p>
 <ol>
 <li>Add point cloud proposals using a top-view.</li>
-<li>Use image augmentation to make the classes of the data more balanced, this would increase the precisions of the class of objects that have fewer occurences, such as "pedestrains" or "other vehicles"</li>
+<li>Use image augmentation to make the classes of the data more balanced, this would increase the precisions of the class of objects that have fewer occurrences, such as "pedestrians" or "other vehicles"</li>
 </ol>
 <h2>Code</h2>
 <p>The source code of this project: <a href="https://github.com/kanhua/lyft-3d-main">Source code</a>.</p>
@@ -173,19 +176,16 @@ Because this model generates the frustum proposals from camera images, objects b
   <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
   <ul class="list-group " id="tags">
     <li class="list-group-item tag-1">
-      <a href="/tag/self-driving-car.html">self-driving car</a>
-    </li>
-    <li class="list-group-item tag-1">
-      <a href="/tag/intelligent-machine.html">intelligent machine</a>
-    </li>
-    <li class="list-group-item tag-2">
       <a href="/tag/computer-vision.html">computer vision</a>
     </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/numerical-modeling.html">numerical modeling</a>
+    <li class="list-group-item tag-1">
+      <a href="/tag/self-driving-car.html">self-driving car</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/physics.html">physics</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/numerical-modeling.html">numerical modeling</a>
     </li>
   </ul>
 </li>
@@ -202,7 +202,7 @@ Because this model generates the frustum proposals from camera images, objects b
    <div class="container">
       <hr>
       <div class="row">
-         <div class="col-xs-10">&copy; 2020 Kan-Hua Lee
+         <div class="col-xs-10">&copy; 2024 Kan-Hua Lee
             &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
             <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
             <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
