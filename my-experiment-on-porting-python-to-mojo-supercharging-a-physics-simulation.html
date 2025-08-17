@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>My experiment on porting Python to Mojo: supercharging a Physics Simulation - Kan-Hua Lee</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/my-experiment-on-porting-python-to-mojo-supercharging-a-physics-simulation.html">
+
+        <meta name="author" content="Kan-Hua Lee" />
+        <meta name="keywords" content="physics,numerical modeling" />
+        <meta name="description" content="Figure: Output of the hard-sphere collision simulation in Mojo. Mojo promises Python&#39;s ease of use with C-like performance. But what does it take to port a real Python project? I converted a hard-sphere collision simulation from Python to Mojo to find out. Here’s a look at the key changes …" />
+
+        <meta property="og:site_name" content="Kan-Hua Lee" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="My experiment on porting Python to Mojo: supercharging a Physics Simulation"/>
+        <meta property="og:url" content="/my-experiment-on-porting-python-to-mojo-supercharging-a-physics-simulation.html"/>
+        <meta property="og:description" content="Figure: Output of the hard-sphere collision simulation in Mojo. Mojo promises Python&#39;s ease of use with C-like performance. But what does it take to port a real Python project? I converted a hard-sphere collision simulation from Python to Mojo to find out. Here’s a look at the key changes …"/>
+        <meta property="article:published_time" content="2025-08-17" />
+            <meta property="article:section" content="Blog" />
+            <meta property="article:tag" content="physics" />
+            <meta property="article:tag" content="numerical modeling" />
+            <meta property="article:author" content="Kan-Hua Lee" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+Kan-Hua Lee            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                         <li><a href="/pages/about-me.html">
+                             About Me
+                          </a></li>
+                         <li><a href="/pages/code-projects.html">
+                             Code Projects
+                          </a></li>
+                        <li class="active">
+                            <a href="/category/blog.html">Blog</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/my-experiment-on-porting-python-to-mojo-supercharging-a-physics-simulation.html"
+                       rel="bookmark"
+                       title="Permalink to My experiment on porting Python to Mojo: supercharging a Physics Simulation">
+                        My experiment on porting Python to Mojo: supercharging a Physics Simulation
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2025-08-17T17:00:00+09:00"> Sun 17 August 2025</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/physics.html">physics</a>
+        /
+	<a href="/tag/numerical-modeling.html">numerical modeling</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <figure style="text-align:center;">
+  <img src="content/images/hard-sphere-collision-output.gif" alt="Hard Sphere Collision Simulation Output" style="width:100%; max-width:500px;">
+  <figcaption>Figure: Output of the hard-sphere collision simulation in Mojo.</figcaption>
+</figure>
+
+<p><a href="https://www.modular.com/mojo">Mojo</a> promises Python's ease of use with C-like performance. But what does it take to port a real Python project? I converted a hard-sphere collision simulation from Python to Mojo to find out. Here’s a look at the key changes, Mojo's powerful Python interoperability, and the lessons learned along the way.</p>
+<p>The code can be found <a href="https://github.com/kanhua/hard-sphere-collision">here</a>.</p>
+<h3>Key Changes: From <code>class</code> to <code>struct</code> and Traits</h3>
+<p>The most significant changes involved moving from Python's dynamic classes to Mojo's static, performance-oriented structures.</p>
+<h4>1. Embracing Value Semantics with <code>struct</code></h4>
+<p>In Python, everything is an object, accessed through references. This is flexible but adds overhead. Mojo introduces the <code>struct</code>, a <strong>value type</strong> that stores its data directly and contiguously in memory. This improves data locality and is a cornerstone of Mojo's performance.</p>
+<ul>
+<li>
+<p><strong>Python:</strong>
+    <code>python
+    class Particle:
+        # ...</code></p>
+</li>
+<li>
+<p><strong>Mojo:</strong>
+    <code>mojo
+    struct Particle:
+        var px: float
+        # ...</code></p>
+</li>
+</ul>
+<h4>2. The Power of Traits</h4>
+<p>A plain <code>struct</code> is just a data container. To make it useful—for example, to store it in a <code>List</code> or use it in a priority queue—it must conform to certain behaviors. In Mojo, these behaviors are defined by <strong>traits</strong>.</p>
+<p>Traits are contracts that a type can implement. For our simulation, the <code>Event</code> struct needs to be sortable in a priority queue, so it must implement the <code>Comparable</code> trait, which defines comparison methods like <code>__lt__</code> and <code>__gt__</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@fieldwise_init</span>
+<span class="k">struct</span><span class="w"> </span><span class="n n-Struct">Particle</span><span class="p">(</span><span class="nb">Copyable</span><span class="p">,</span><span class="w"> </span><span class="nb">Movable</span><span class="p">):</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="nv">px</span><span class="p">:</span><span class="w"> </span><span class="nb">float</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="nv">py</span><span class="p">:</span><span class="w"> </span><span class="nb">float</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="nv">vx</span><span class="p">:</span><span class="w"> </span><span class="nb">float</span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="nv">vy</span><span class="p">:</span><span class="w"> </span><span class="nb">float</span>
+</code></pre></div>
+
+<p>The <code>@value</code> decorator is a convenient shorthand that automatically implements several common traits like <code>Copyable</code> and <code>Movable</code>. While the decorator itself may evolve, the underlying concept is crucial: <strong>traits give you explicit control over a type's capabilities</strong>, which is central to Mojo's philosophy of safe, high-performance programming.</p>
+<h4>3. A New Memory Mindset</h4>
+<p>Python's garbage collector simplifies memory management. In Mojo, you must be more deliberate. In our Python <code>Event</code> class, we could store direct references to <code>Particle</code> objects. This is not feasible in Mojo due to its ownership rules.</p>
+<p>The solution was to refactor the <code>Event</code> struct to store the integer <strong>indices</strong> of particles in the main particle list, rather than direct references. This is a common pattern when porting from a garbage-collected language and, while a hurdle, it forces a more memory-aware design that unlocks performance.</p>
+<h3>Mojo's Superpower: Seamless Python Interop</h3>
+<p>You don't have to wait for the entire Python ecosystem to be rewritten in Mojo. You can import and use any Python library directly. Our Mojo simulation leverages this for configuration, data logging, and visualization.</p>
+<h4>Reading Configuration and Saving Data</h4>
+<p>Instead of writing a new file parser, we just use Python's <code>tomllib</code> and <code>csv</code> modules.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_headless</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<span class="w">    </span><span class="c1"># Import Python modules</span>
+<span class="w">    </span><span class="n">csv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Python</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">builtins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Python</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;builtins&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c1"># Use them as if they were native</span>
+<span class="w">    </span><span class="n">file_handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builtins</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file_handle</span><span class="p">)</span>
+<span class="w">    </span><span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;kinetic_energy&quot;</span><span class="p">])</span>
+<span class="w">    </span><span class="c1"># ...</span>
+</code></pre></div>
+
+<p>Mojo seamlessly calls into the Python runtime, and we can easily convert data between the two worlds.</p>
+<h3>Speed comparsion</h3>
+<p>Below is the comparison of the execution time of the two implementations.</p>
+<table>
+<thead>
+<tr>
+<th>Number of Particles</th>
+<th style="text-align: right;">Mojo Time (s)</th>
+<th style="text-align: right;">Python Time (s)</th>
+<th style="text-align: right;">Speedup (Python ÷ Mojo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td style="text-align: right;">0.00387</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">~2.58×</td>
+</tr>
+<tr>
+<td>1,000</td>
+<td style="text-align: right;">0.01893</td>
+<td style="text-align: right;">0.29</td>
+<td style="text-align: right;">~15.32×</td>
+</tr>
+<tr>
+<td>5,000</td>
+<td style="text-align: right;">0.64098</td>
+<td style="text-align: right;">7.53</td>
+<td style="text-align: right;">~11.75×</td>
+</tr>
+<tr>
+<td>10,000</td>
+<td style="text-align: right;">3.53767</td>
+<td style="text-align: right;">32.72</td>
+<td style="text-align: right;">~9.25×</td>
+</tr>
+<tr>
+<td>30,000</td>
+<td style="text-align: right;">71.68333</td>
+<td style="text-align: right;">408.62</td>
+<td style="text-align: right;">~5.70×</td>
+</tr>
+</tbody>
+</table>
+<h4>Generating Plots with Matplotlib</h4>
+<p>The Mojo version saves each simulation frame as an image using Python's <code>matplotlib</code>. This is a fantastic demonstration of interoperability.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">animate_simulation</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<span class="w">    </span><span class="n">plt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Python</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;matplotlib.pyplot&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="c1"># ...</span>
+<span class="w">    </span><span class="c1"># Pass Mojo lists to Python for plotting</span>
+<span class="w">    </span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+<span class="w">        </span><span class="n">Python</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">pxs</span><span class="p">),</span><span class="w">      </span><span class="c1"># pxs is a Mojo List[float]</span>
+<span class="w">        </span><span class="n">Python</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">pys</span><span class="p">),</span><span class="w">      </span><span class="c1"># pys is a Mojo List[float]</span>
+<span class="w">        </span><span class="n">s</span><span class="o">=</span><span class="n">Python</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">sizes</span><span class="p">)</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This ability to leverage the vast Python ecosystem is Mojo's killer feature, making it practical for real-world projects <em>today</em>.</p>
+<h3>Final Thoughts</h3>
+<p>The payoff, however, is significant. The Mojo version runs significantly faster, but more importantly, the seamless Python interoperability provides a practical bridge. You can migrate performance-critical code to Mojo while leaving the rest in Python, getting the best of both worlds. Mojo isn't just a faster Python; it's a pragmatic path to high-performance computing without leaving a beloved ecosystem behind.The journey from Python to Mojo is less about a direct translation and more about a shift in mindset. The primary hurdle is moving from dynamic, reference-based objects to static, value-based <code>struct</code>s and a trait-based system.
+The journey from Python to Mojo is less about a direct translation and more about a shift in mindset. The primary hurdle is moving from dynamic, reference-based objects to static, value-based <code>struct</code>s and a trait-based system.</p>
+<p>The payoff, however, is significant. The Mojo version runs significantly faster, but more importantly, the seamless Python interoperability provides a practical bridge. You can migrate performance-critical code to Mojo while leaving the rest in Python, getting the best of both worlds. Mojo isn't just a faster Python; it's a pragmatic path to high-performance computing without leaving a beloved ecosystem behind.</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://github.com/kanhua"><i class="fa fa-github-square fa-lg"></i> github</a></li>
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/kanhualee/"><i class="fa fa-linkedin-square fa-lg"></i> linkedin</a></li>
+    <li class="list-group-item"><a href="https://medium.com/@kanhua"><i class="fa fa-medium-square fa-lg"></i> medium</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/self-driving-car.html">self-driving car</a>
+    </li>
+    <li class="list-group-item tag-1">
+      <a href="/tag/computer-vision.html">computer vision</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/physics.html">physics</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/numerical-modeling.html">numerical modeling</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2025 Kan-Hua Lee
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+
+
+</body>
+</html>
