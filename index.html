@@ -37,26 +37,11 @@
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
             <a href="/" class="navbar-brand">
 Kan-Hua Lee            </a>
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
-                         <li><a href="/pages/about-me.html">
-                             About Me
-                          </a></li>
-                         <li><a href="/pages/code-projects.html">
-                             Code Projects
-                          </a></li>
-                        <li >
-                            <a href="/category/blog.html">Blog</a>
-                        </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
             </ul>
@@ -72,99 +57,6 @@ Kan-Hua Lee            </a>
 <div class="container">
     <div class="row">
         <div class="col-sm-9">
-            <article>
-                <h2><a href="/my-experiment-on-porting-python-to-mojo-supercharging-a-physics-simulation.html">My experiment on porting Python to Mojo: supercharging a Physics Simulation</a></h2>
-                <div class="summary"><figure style="text-align:center;">
-  <img src="./images/hard-sphere-collision-output.gif" alt="Hard Sphere Collision Simulation Output" style="width:100%; max-width:500px;">
-  <figcaption>Figure: Output of the hard-sphere collision simulation in Mojo.</figcaption>
-</figure>
-
-<p><a href="https://www.modular.com/mojo">Mojo</a> promises Python's ease of use with C-like performance. But what does it take to port a real Python project? I converted a hard-sphere collision simulation from Python to Mojo to find out. Here’s a look at the key changes …</p>
-                    <a class="btn btn-default btn-xs" href="/my-experiment-on-porting-python-to-mojo-supercharging-a-physics-simulation.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/my-selected-highlights-of-cvpr-2024.html">My selected highlights of CVPR 2024</a></h2>
-                <div class="summary"><p>I got a chance to attend CVPR 2024 (remotely). I posted my version of highlights on my Medium.</p>
-<p>Here are the links:</p>
-<ul>
-<li><a href="https://medium.com/@kanhua/cvpr-2024-highlights-on-structure-from-motion-3bedf16f9084">CVPR 2024 highlights on structure from motion</a></li>
-<li><a href="https://medium.com/@kanhua/cvpr-2024-highlights-keynotes-f0ff9117fc0a">CVPR 2024 Keynotes</a></li>
-<li><a href="https://medium.com/@kanhua/cvpr-2024-selected-paper-highlights-e976fc213334">CVPR 2024 selected paper highlights</a></li>
-<li><a href="https://medium.com/@kanhua/cvpr-2024-papers-on-action-anticipation-d9d9671663bc">CVPR 2024 papers on action anticipation</a></li>
-</ul>
-                    <a class="btn btn-default btn-xs" href="/my-selected-highlights-of-cvpr-2024.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/ray-tracing-simulation-a-tutorial.html">Ray Tracing Simulation: A Tutorial</a></h2>
-                <div class="summary"><p><img src="/images/ray_tracing_result.png" alt="ray_tracing_result" width="50%"></p>
-<p>Modeling light as rays is widely used in computer graphics and lens design. I encountered this problem when I tried to do some optical design but had no access to commercial ray-tracing software, such as ZEMAX OpticStudio or LightTools. During my attempt of implementing a ray-tracing program for my own …</p>
-                    <a class="btn btn-default btn-xs" href="/ray-tracing-simulation-a-tutorial.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/3d-object-detection-with-lyft-self-driving-car-data.html">3D object detection with Lyft self-driving car data</a></h2>
-                <div class="summary"><p>This is my attempt of a past Kaggle competition <a href="https://www.kaggle.com/c/3d-object-detection-for-autonomous-vehicles">Lyft 3D Object Detection for Autonomous Vehicles</a>, using the concept of <a href="http://stanford.edu/~rqi/frustum-pointnets/">frustum-pointnet</a> to solve this past Kaggle competition.</p>
-<p>This is an example of the classifed results:
-<img src="/images/lyft-3d/demo_image_10.png" alt="camera_image"></p>
-<h3>Result</h3>
-<p>This work is still in progress. The result does not seem too bad if …</p>
-                    <a class="btn btn-default btn-xs" href="/3d-object-detection-with-lyft-self-driving-car-data.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/traffic-light-classification-without-re-training-a-dnn-model.html">Traffic light classification without (re-)training a DNN model</a></h2>
-                <div class="summary"><p><img src="/images/traffic_light_demo.png" alt="traffic_light_demo"></p>
-<p>I did this project partly for Udacity's Self-Driving car degree and was lazy to train and retraing a DNN model.
-It ends up that this solution is not so lazy, but I did learn some details and traps of using a HSV or HSL color space.</p>
-<p>I posted the writing-up …</p>
-                    <a class="btn btn-default btn-xs" href="/traffic-light-classification-without-re-training-a-dnn-model.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/lane-line-detection.html">Lane line detection</a></h2>
-                <div class="summary"><p>This is a project with Udacity's Self-Driving Car Nanodegree.
-The aim is to identify the lane lines on the road and get their curvatures, using an algorithmic (i.e. non-machine learning) way.</p>
-<p>Here's the result of the baseline video:</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Z9-51I20zCI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<p>and here's the results on a more challenging scene:</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/BfmWPUB-CTk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<h3>Code and …</h3>
-                    <a class="btn btn-default btn-xs" href="/lane-line-detection.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/implementing-path-planning-of-a-self-driving-car.html">Implementing path planning of a self-driving car</a></h2>
-                <div class="summary"><iframe width="560" height="315" src="https://www.youtube.com/embed/hCUNa_P6BuM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<p>The aim of this project is to implement a car that drives automatically in a simulation world.
-The car should be able to switch the lane smoothly when necessary. 
-I think this is the most fun and challenging project of <a href="https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013">Udacity Self-Driving Car Nanodegree</a>.</p>
-<p>The code repo and the explanation …</p>
-                    <a class="btn btn-default btn-xs" href="/implementing-path-planning-of-a-self-driving-car.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/behavioural-cloning-of-self-driving-car.html">Behavioural cloning of self-driving car</a></h2>
-                <div class="summary"><iframe width="560" height="315" src="https://www.youtube.com/embed/OyS8siF0Mpk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<p>This is a project with Udacity's Self-Driving Car Nanodegree.
-The aim is to use deep learning approach[1] to clone the behaviour of a car in the simulator made by Udacity.
-To get a good data set, I have to "drive" well in the simulator, and use this dataset to …</p>
-                    <a class="btn btn-default btn-xs" href="/behavioural-cloning-of-self-driving-car.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
 
         </div>
         <div class="col-sm-3" id="sidebar">
@@ -188,18 +80,6 @@ To get a good data set, I have to "drive" well in the simulator, and use this da
 <li class="list-group-item">
   <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
   <ul class="list-group " id="tags">
-    <li class="list-group-item tag-1">
-      <a href="/tag/computer-vision.html">computer vision</a>
-    </li>
-    <li class="list-group-item tag-1">
-      <a href="/tag/self-driving-car.html">self-driving car</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/physics.html">physics</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/numerical-modeling.html">numerical modeling</a>
-    </li>
   </ul>
 </li>
 <!-- End Sidebar/Tag Cloud -->
@@ -215,7 +95,7 @@ To get a good data set, I have to "drive" well in the simulator, and use this da
    <div class="container">
       <hr>
       <div class="row">
-         <div class="col-xs-10">&copy; 2025 Kan-Hua Lee
+         <div class="col-xs-10">&copy;  Kan-Hua Lee
             &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
             <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
             <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
